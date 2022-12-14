@@ -1,0 +1,13 @@
+.header {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: #1f222e;
+  color: aliceblue;
+  font-size: x-large;
+  letter-spacing: 2px;
+  font-weight: 900;
+  font-style: italic;
+}
