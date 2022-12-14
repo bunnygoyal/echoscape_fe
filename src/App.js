@@ -70,6 +70,17 @@ const RecordView = (props) => {
     }
     setIsActive(!isActive);
   };
+  const onGenerate = async () => {
+    const audioBlob = await fetch(mediaBlobUrl).then((r) => r.blob());
+    const audioFile = new File([audioBlob], "voice.wav", { type: "audio/wav" });
+    const formData = new FormData();
+
+    formData.append("file", audioFile);
+    for (var pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+    // onSaveAudio(formData);
+  };
   return (
     <div>
       <Header />
@@ -101,7 +112,7 @@ const RecordView = (props) => {
             </div>
             <div className="image-action">
               <h2>Generate Your Awesome Image !</h2>
-              <button className="btn image-gen-btn" onClick={stopTimer}>
+              <button className="btn image-gen-btn" onClick={onGenerate}>
                 <span>Generate Now</span>
               </button>
             </div>
