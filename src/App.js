@@ -1,11 +1,15 @@
 import { useReactMediaRecorder } from "react-media-recorder";
 import React, { useEffect, useState } from "react";
 import Header from "./Components/Header";
+import { getImage } from "./Services/GetImage/getImage";
 const RecordView = (props) => {
   const [second, setSecond] = useState("00");
   const [minute, setMinute] = useState("00");
   const [isActive, setIsActive] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [image, setImage] = useState("");
+  const [text, setText] = useState("");
+  const [isImageLoading, setIsImageLoading] = useState(false);
 
   useEffect(() => {
     let intervalId;
@@ -71,14 +75,29 @@ const RecordView = (props) => {
     setIsActive(!isActive);
   };
   const onGenerate = async () => {
+    setImage("");
+    setText("");
+    console.log("On generate");
+    setIsImageLoading(true);
     const audioBlob = await fetch(mediaBlobUrl).then((r) => r.blob());
     const audioFile = new File([audioBlob], "voice.wav", { type: "audio/wav" });
+    console.log("AUDIO FILE", audioFile, audioBlob);
     const formData = new FormData();
 
-    formData.append("file", audioFile);
+    formData.append("audio_path", audioFile);
     for (var pair of formData.entries()) {
       console.log(pair[0], pair[1]);
     }
+
+    const response = await getImage(formData);
+    console.log("API RESPONSE", response);
+    if (response.image_link) {
+      setImage(response.image_link);
+    }
+    if (response.transcribed_text) {
+      setText(response.transcribed_text);
+    }
+    setIsImageLoading(false);
     // onSaveAudio(formData);
   };
   return (
@@ -112,17 +131,31 @@ const RecordView = (props) => {
             </div>
             <div className="image-action">
               <h2>Generate Your Awesome Image !</h2>
-              <button className="btn image-gen-btn" onClick={onGenerate}>
-                <span>Generate Now</span>
+              <button
+                disabled={mediaBlobUrl ? (isImageLoading ? true : false) : true}
+                className="btn image-gen-btn"
+                onClick={onGenerate}
+              >
+                <span>{isImageLoading ? "Generating.." : "Generate Now"}</span>
               </button>
             </div>
           </div>
         </div>
         <div className="image-section">
-          <h2>You Have Generated An Awesome Image</h2>
-          <div className="img-display">
-            <img src="https://img.freepik.com/free-photo/beautiful-shot-crystal-clear-lake-snowy-mountain-base-during-sunny-day_181624-5459.jpg?w=2000"></img>
-          </div>
+          {isImageLoading && (
+            <h2>
+              Generating Your Awesome Image.... <br></br> Please Wait... !
+            </h2>
+          )}
+          {image.length > 0 && text.length > 0 && (
+            <h2>You Have Generated An Awesome Image !</h2>
+          )}
+
+          {!image && !text && !isImageLoading && (
+            <h2>Your Awesome Image will Appear Here!</h2>
+          )}
+          <div className="img-display">{image && <img src={image}></img>}</div>
+          {text && <div className="img-caption">{text}</div>}
         </div>
       </div>
     </div>
