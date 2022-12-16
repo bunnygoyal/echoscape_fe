@@ -143,16 +143,23 @@ const RecordView = (props) => {
         </div>
         <div className="image-section">
           {isImageLoading && (
-            <h2>
-              Generating Your Awesome Image.... <br></br> Please Wait... !
-            </h2>
+            <>
+              <h2>
+                Generating Your Awesome Image.... <br></br> Please Wait... !
+              </h2>{" "}
+              <div className="loader_con ">
+                <div className="loader"></div>
+              </div>
+            </>
           )}
           {image.length > 0 && text.length > 0 && (
             <h2>You Have Generated An Awesome Image !</h2>
           )}
 
           {!image && !text && !isImageLoading && (
-            <h2>Your Awesome Image will Appear Here!</h2>
+            <>
+              <h2>Your Awesome Image will Appear Here!</h2>
+            </>
           )}
           <div className="img-display">{image && <img src={image}></img>}</div>
           {text && <div className="img-caption">{text}</div>}
