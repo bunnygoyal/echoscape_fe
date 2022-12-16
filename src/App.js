@@ -153,7 +153,9 @@ const RecordView = (props) => {
             </>
           )}
           {image.length > 0 && text.length > 0 && (
-            <h2>You Have Generated An Awesome Image !</h2>
+            <>
+              <h2>You Have Generated An Awesome Image !</h2>
+            </>
           )}
 
           {!image && !text && !isImageLoading && (

@@ -3,7 +3,7 @@ import "./Styles/header.css";
 const Header = () => {
   return (
     <div className="header">
-      <h4>EchoScape.Ai</h4>
+      <h1>EchoScape.Ai</h1>
     </div>
   );
 };
